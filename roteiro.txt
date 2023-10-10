@@ -1,0 +1,67 @@
+github, cria novo rep
+clica em code, copia o link
+abre o vscode, acessa a pasta raiz dos projetos
+git clone <link>
+open folder, escolha a pasta
+cria o index.js
+npm init -y
+npm i express mongoose mongodb nodemon dotenv
+altera package.json e add "scripts":{"start": "nodemon index.js"}
+mongodb.com, cria conta
+cria projeto
+cria deployment, M0, free
+cria usuario, copia login e senha andreiftm SmgU9y6bHvZQ6RL2
+add ip
+clica connect
+connect with driver
+copia o full code
+cola no index.js
+cria o .env, add a database_url toda sem aspas
+no index.js ->  require('dotenv').config();
+                const mongoString = process.env.DATABASE_URL
+cria a pasta routes, e o arquivo routes.js
+no index.js -> 
+  const routes = require('./routes/routes');
+  app.use('/api', routes)
+no routes.js
+  const express = require('express');
+  const router = express.Router()
+  module.exports = router;
+
+Now, let's write our endpoints here in this routes file. We will have five routes for the following actions:
+
+Posting data to Database.
+Getting all the data from the Database.
+Getting data based on the ID.
+Updating data based on the ID.
+Deleting data based on the ID.
+
+So, let's create the routes for these actions:
+
+//Post Method
+router.post('/post', (req, res) => {
+    res.send('Post API')
+})
+
+//Get all Method
+router.get('/getAll', (req, res) => {
+    res.send('Get All API')
+})
+
+//Get by ID Method
+router.get('/getOne/:id', (req, res) => {
+    res.send('Get by ID API')
+})
+
+//Update by ID Method
+router.patch('/update/:id', (req, res) => {
+    res.send('Update by ID API')
+})
+
+//Delete by ID Method
+router.delete('/delete/:id', (req, res) => {
+    res.send('Delete by ID API')
+})
+
+Para testar no browser, /api/getAll
+Para testar no postman, /api/post (ou outros lembrando de mudar o req no postman)

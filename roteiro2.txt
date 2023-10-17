@@ -1,0 +1,114 @@
+Se der o erro do 'majority', retirar o &w=majority; do .env
+
+Abrir o mongodb cloud e add ip address
+
+Mostrar a lista de queries do mongoose https://mongoosejs.com/docs/queries.html
+
+Criar o modelo do banco de dados
+Create a folder called model and inside, a file called model.js.
+----------------------------------------------------
+const mongoose = require('mongoose');
+
+const dataSchema = new mongoose.Schema({
+    name: {
+        required: true,
+        type: String
+    },
+    age: {
+        required: true,
+        type: Number
+    }
+})
+
+module.exports = mongoose.model('Data', dataSchema)
+----------------------------------------------------
+
+
+Now, import this model inside the routes.js file.
+----------------------------------------------------
+const Model = require('../model/model');
+----------------------------------------------------
+
+
+Substituir a rota post por esta:
+----------------------------------------------------
+router.post('/post', async (req, res) => {
+    const data = new Model({
+        name: req.body.name,
+        age: req.body.age
+    })
+
+    try {
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch (error) {
+        res.status(400).json({message: error.message})
+    }
+})
+----------------------------------------------------
+
+Substituir a rota getAll por:
+-----------------------------------------------------
+router.get('/getAll', async (req, res) => {
+    try{
+        const data = await Model.find();
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+-----------------------------------------------------
+
+
+
+Substituir a rota getOne por:
+-----------------------------------------------------
+router.get('/getOne/:id', async (req, res) => {
+    try{
+        const data = await Model.findById(req.params.id);
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+-----------------------------------------------------
+
+
+Substituir a rota update por:
+
+-----------------------------------------------------
+router.patch('/update/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedData = req.body;
+        const options = { new: true };
+
+        const result = await Model.findByIdAndUpdate(
+            id, updatedData, options
+        )
+
+        res.send(result)
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
+-----------------------------------------------------
+
+
+Substituir a rota delete por:
+-----------------------------------------------------
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = await Model.findByIdAndDelete(id)
+        res.send(`Document with ${data.name} has been deleted..`)
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
+-----------------------------------------------------
